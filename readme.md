@@ -8,13 +8,13 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
 ### [Data](./data)
 
 * [database/](./data/database)
-* [raw data/](./data/raw_data)
+* [raw data/](./data/raw%20data/)
 
 
 ### [Documentation](./Documentation)
 
 * Contains team breakdowns, tasks and other relevant stuff.
-* [Current Project Scope](./Documentation/Project_Scope.md)
+* [Current Project Scope](./Documentation/Project%20Scope.md)
 
 
 ### [Src](.\Src)
