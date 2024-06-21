@@ -5,22 +5,22 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
 
 ## Directory Structure
 
-### [Data](.\data)
+### [Data](./data)
 
-* [database/](.\data\database)
-* [raw data/](.\data\raw_data)
+* [database/](./data/database)
+* [raw data/](./data/raw_data)
 
 
-### [Documentation](.\Documentation)
+### [Documentation](./Documentation)
 
 * Contains team breakdowns, tasks and other relevant stuff.
-* [Current Project Scope](.\Documentation\Project_Scope.md)
+* [Current Project Scope](./Documentation/Project_Scope.md)
 
 
 ### [Src](.\Src)
 
-* [notebooks/](.\Src\notebooks)
-* [scripts/](.\Src\scripts)
+* [notebooks/](./Src/notebooks)
+* [scripts/](./Src/scripts)
 
 ## Setup
 
