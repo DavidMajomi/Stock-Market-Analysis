@@ -1,2 +1,5 @@
 # Ignore python virtual environment
 venv/
+
+# Ignore pycache files
+src/scripts/__pycache__
