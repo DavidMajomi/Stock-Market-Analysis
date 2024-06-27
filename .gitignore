@@ -3,3 +3,6 @@ venv/
 
 # Ignore pycache files
 src/scripts/__pycache__
+
+# ignore all db files
+*db
