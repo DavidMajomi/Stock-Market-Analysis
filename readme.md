@@ -28,10 +28,12 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
 - ### Price prediction with LSTM
     * Jaydentani
     * Chtjigur
+    * Brianna
     
 - ### Price movement prediction with sentiment analysis
     * Dagi
-    * TBD
+    * Ana
+    * King
 
 - ### Data Sourcing and Storage
     * TBD
@@ -41,7 +43,7 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
     * Due to the scope, i think everyone will probably work here at some point.
 
 - ### Python Server and related API's
-    * TBD
+    * David
 
 ## Directory Structure
 
