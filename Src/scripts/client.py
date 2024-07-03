@@ -1,7 +1,10 @@
+import os
 import socket
 import json
+import time
 import server_client_constants
 
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 HEADER = server_client_constants.HEADER
 PORT = server_client_constants.PORT
@@ -35,15 +38,25 @@ def send(msg):
 
 
 def get_data_to_send() -> str:
-    return {"ticker" : "A"}
+    return {"ticker" : "AAPL"}
 
 
 data = get_data_to_send()
 
 data = json.dumps(data)
 
-
+# t1 = time.perf_counter()
 recieved_data = send(data)
+# t2 = time.perf_counter()
+
+# print(f"time for first call = {t2 - t1}")
+
+# t3 = time.perf_counter()
+# recieved_data = send(data)
+# t4 = time.perf_counter()
+
+# print(f"time for second call = {t4 - t3}")
 
 print(json.dumps((recieved_data), indent=4))
 # print(recieved_data["Ticker Data"])
+# print(json.dumps((recieved_data["Meta Data"]), indent=4))

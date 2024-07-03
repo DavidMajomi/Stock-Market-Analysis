@@ -1,0 +1,25 @@
+All time values are in seconds
+
+Ticker A
+time for first call = 0.44996659993194044
+time for second call = 0.3496236000210047
+
+Ticker TSLA
+time for first call = 0.2599601000547409
+time for second call = 0.17338100005872548
+
+Ticker MSFT
+time for first call = 0.6926677001174539
+time for second call = 0.5548419998958707
+
+Ticker GOOGL
+time for first call = 0.36541660013608634
+time for second call = 0.3171867998316884
+
+Ticker AAPL
+time for first call = 0.7996318000368774
+time for second call = 0.5410675001330674
+
+
+Conclusion:
+    Improvements through memoization works. Although performance Improvements look small, scaling over the index results in significant latency reduction
