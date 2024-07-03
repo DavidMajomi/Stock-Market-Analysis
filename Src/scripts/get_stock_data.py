@@ -65,7 +65,7 @@ def populate_db_with_most_active_stocks():
     
     engine = create_engine("sqlite:///" + PATH_TO_DB_WITH_MOST_ACTIVE_STOCKS, echo=False)
     
-    df.to_sql(MOST_ACTIVE_STOCKS_TABLE_NAME, con=engine, if_exists="replace", index=True)
+    df.to_sql(MOST_ACTIVE_STOCKS_TABLE_NAME, con=engine, if_exists="replace", index=False)
     
     engine.dispose()
     
