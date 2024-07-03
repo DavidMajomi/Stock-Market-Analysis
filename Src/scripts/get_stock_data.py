@@ -90,7 +90,7 @@ def get_list_of_tickers_in_db(path_to_db) -> list:
     
 def get_table_matching_ticker(ticker: str) -> pd.DataFrame:
     
-    query = "SELECT * FROM " + ticker
+    query = "SELECT * FROM " + f"'{ticker}'"
     
     engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
     
@@ -101,10 +101,23 @@ def get_table_matching_ticker(ticker: str) -> pd.DataFrame:
 
 def get_date_and_close_price_data_macthing_ticker(ticker: str) -> pd.DataFrame:
     
-    query = "SELECT Date, Close FROM " + ticker
+    query = "SELECT Date, Close FROM " + f"'{ticker}'"
     
     engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
     
     price_data = pd.read_sql(query, engine)
     
     return price_data
+
+
+def get_all_price_data_mapped_to_ticker() -> dict:
+    ticker_price_data_map = {}
+    
+    print(PATH_TO_DB_DIR)
+    all_tickers = get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
+    
+    for ticker in all_tickers:
+        ticker_price_data_map[ticker] = get_table_matching_ticker(ticker)
+        
+    return ticker_price_data_map
+        
