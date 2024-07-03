@@ -1,5 +1,8 @@
+import os
 import pandas as pd
 import path_constants
+
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 PATH_TO_CSV_WITH_S_AND_P_DATA = path_constants.PATH_TO_CSV_WITH_S_AND_P_DATA
 
