@@ -1,10 +1,12 @@
 import os
 import json
 import socket
+import time
 import threading
 import server_client_constants
-import multiprocessing 
-# from init_all_data import init_all_required_data
+import multiprocessing
+from path_constants import PATH_TO_DB_PRICE_DATA  
+from init_all_data import init_all_required_data
 from get_stock_data import get_table_matching_ticker, get_list_of_tickers_in_db
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -42,7 +44,7 @@ def get_adjusted_close_price_based_on_sentiment(ticker: str) -> float:
 
 
 def load_all_s_and_p_data_to_memory():
-    list_of_tickers = get_list_of_tickers_in_db()
+    list_of_tickers = get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
     
     for ticker in list_of_tickers:
         data_columns, hist_data = get_historical_price_data(ticker)
@@ -147,12 +149,20 @@ def start():
     print("Setting up server...")
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)
-        
-    server.listen()
-    print(f"Server is listening on {SERVER}")
+    
+    # t1 = time.perf_counter()
     
     # init_all_required_data()
     # load_all_s_and_p_data_to_memory()
+    
+    # t2 = time.perf_counter()
+    
+    # print(f"Time taken to initialize and load data to memory is {t2 - t1}")
+    
+    server.listen()
+    print(f"Server is listening on {SERVER}")
+    
+    
     
     num_connections_to_server = 0
     while True:
