@@ -7,7 +7,7 @@ import server_client_constants
 import multiprocessing
 from path_constants import PATH_TO_DB_PRICE_DATA  
 from init_all_data import init_all_required_data
-from get_stock_data import get_table_matching_ticker, get_list_of_tickers_in_db, get_tickers_as_associative_container
+from get_stock_data import get_table_matching_ticker, get_list_of_tickers_in_db
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
