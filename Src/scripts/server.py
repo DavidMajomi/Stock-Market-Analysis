@@ -64,7 +64,6 @@ def load_all_s_and_p_data_to_memory():
 
 def get_ticker_info(ticker : str) -> dict:
     if (ticker in ALL_TICKER_DATA):
-        print("Ticker in dict")
         
         ticker_data_to_return_to_client = {
             "ticker" : ticker,
