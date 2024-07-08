@@ -71,4 +71,4 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
     * Create and enable a python venv
     * Install requirements from the requirements.txt file
 - ### Getting Data
-    * Run the init_all_data.py file from the scripts directory. This will automatically get the required data for price prediction using LSTM.
+    * Run the setup.py file from the scripts directory. This will automatically get the required data for price prediction using LSTM.
