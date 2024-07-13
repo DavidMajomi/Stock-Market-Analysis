@@ -17,3 +17,7 @@ data/raw data/Most Active Stocks.csv
 API Keys/
 
 /sentimentanalysis/__pycache__
+
+Src/scripts/news_api_test_data.txt
+
+Src/__pycache__/
