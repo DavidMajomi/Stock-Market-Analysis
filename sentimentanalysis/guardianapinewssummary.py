@@ -1,8 +1,29 @@
+import sys
+import os
 import requests
 import time
 from typing import List, Dict
+# from api_tools import read_api_key_from_file
 
-API_KEY = 'd63ab7ce-e7d2-415d-a365-9d7602b5f4e9'
+# # Get current file path
+# CURRENT_FILE_DIR = os.path.abspath(__file__)
+
+# # Get root dir
+# MODULE_DIR = os.path.abspath(f"{CURRENT_FILE_DIR}/../../")
+
+# sys.path.append(MODULE_DIR)
+    
+# import Src.scripts.path_constants as path_constants
+
+# # Change directory to that of path constants since all paths are declared relative to it
+# os.chdir(os.path.dirname(os.path.abspath("Src\scripts\path_constants.py")))
+
+# PATH_TO_GUARDIAN_NEWS_API_KEY = path_constants.PATH_TO_GUARDIAN_NEWS_API_KEY
+
+# API_KEY = read_api_key_from_file(PATH_TO_GUARDIAN_NEWS_API_KEY)
+
+API_KEY = "Enter your api key"
+
 
 def get_finance_news(api_key: str, companies: List[str], from_date: str, page_size: int = 50) -> Dict[str, List[Dict]]:
     base_url = "https://content.guardianapis.com/search"
