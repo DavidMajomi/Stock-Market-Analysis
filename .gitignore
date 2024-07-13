@@ -8,3 +8,12 @@ src/scripts/__pycache__
 *db
 
 Experiments/
+
+
+Failed Experiments/
+
+API Keys/alpha_vantage_api_key.txt
+
+API Keys/news_api_org_api_key.txt
+
+data/raw data/Most Active Stocks.csv
