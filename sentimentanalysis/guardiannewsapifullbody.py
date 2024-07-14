@@ -2,7 +2,7 @@ import requests
 import time
 from typing import List, Dict
 
-API_KEY = 'd63ab7ce-e7d2-415d-a365-9d7602b5f4e9'
+API_KEY = "Enter your api key"
 
 def get_finance_news(api_key: str, companies: List[str], from_date: str, page_size: int = 10) -> Dict[str, List[Dict]]:
     base_url = "https://content.guardianapis.com/search"
