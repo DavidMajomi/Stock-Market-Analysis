@@ -67,4 +67,3 @@ def get_and_store_news_api_org_todays_top_business_headlines():
     engine.dispose()
     
     
-get_and_store_news_api_org_todays_top_business_headlines()
