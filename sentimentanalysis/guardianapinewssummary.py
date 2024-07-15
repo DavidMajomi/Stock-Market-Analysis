@@ -3,6 +3,7 @@ import os
 import requests
 import time
 from typing import List, Dict
+# Uncomment below to use api key from file
 # from api_tools import read_api_key_from_file
 
 # # Get current file path
