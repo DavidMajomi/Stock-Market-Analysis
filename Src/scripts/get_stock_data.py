@@ -86,6 +86,17 @@ def get_list_of_tickers_in_db(path_to_db) -> list:
         data[i] = data[i][0]
         
     return data
+
+
+def get_tickers_as_associative_container(path_to_db) -> dict:
+    ticker_dict = {}
+    tickers = get_list_of_tickers_in_db(path_to_db)
+    
+    for ticker in tickers:
+        ticker_dict[ticker] = ticker
+        
+    return ticker_dict
+    
     
     
 def get_table_matching_ticker(ticker: str) -> pd.DataFrame:

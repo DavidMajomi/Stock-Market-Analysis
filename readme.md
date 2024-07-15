@@ -36,11 +36,12 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
     * King
 
 - ### Data Sourcing and Storage
-    * TBD
-    * TBD
+    * David
 
 - ### Web app
     * Due to the scope, i think everyone will probably work here at some point.
+    * Zindzi
+    * Brianna
 
 - ### Python Server and related API's
     * David
@@ -71,4 +72,5 @@ The goal of this project is to analyze the S&P 500 index and create an interacti
     * Create and enable a python venv
     * Install requirements from the requirements.txt file
 - ### Getting Data
-    * Run the init_all_data.py file from the scripts directory. This will automatically get the required data for price prediction using LSTM.
+    * Run the setup.py file from the scripts directory. This will automatically get the required data for price prediction using LSTM.
+    * Enter required api keys to automatically store them in related files

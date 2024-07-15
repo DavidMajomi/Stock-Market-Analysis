@@ -29,7 +29,3 @@ def init_all_required_data() -> None:
     get_price_data_and_populate_db(ticker_listing_data)
     print("Done")
 
-
-
-
-init_all_required_data()

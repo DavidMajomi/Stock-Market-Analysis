@@ -38,7 +38,8 @@ def send(msg):
 
 
 def get_data_to_send() -> str:
-    return {"ticker" : "AAPL"}
+    # return {"ticker" : "AAPL"}
+    return {"ticker" : "php"}
 
 
 data = get_data_to_send()
