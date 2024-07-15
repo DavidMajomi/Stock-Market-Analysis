@@ -23,3 +23,5 @@ Src/scripts/news_api_test_data.txt
 Src/__pycache__/
 
 Src/scripts/yf_news.py
+
+Src/scripts/NewsApiTest.py
