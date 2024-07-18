@@ -1,3 +1,8 @@
+# Data Manipulation
+import pandas as pd
+import math
+from datetime import datetime
+
 days_back = 4
 
 def get_range(df, start, end):
