@@ -116,14 +116,14 @@ def process_request(request_data):
             
             meta_data["historical_price_data"] = f"Historical data in format {ALL_TICKER_DATA[ticker]['historical_price_columns']}"
             
-            ticker_data_to_return_to_client = get_ticker_info()
+            ticker_data_to_return_to_client = get_ticker_info(ticker)
                 
         else:
             data_columns, hist_data = get_historical_price_data(ticker)
             
             meta_data["historical_price_data"] = f"Historical data in format {data_columns}"
             
-            ticker_data_to_return_to_client = get_ticker_info()
+            ticker_data_to_return_to_client = get_ticker_info(ticker)
             
     else:
         meta_data = {
@@ -179,14 +179,14 @@ def start():
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(ADDR)
     
-    # t1 = time.perf_counter()
+    t1 = time.perf_counter()
     
-    # init_all_required_data()
-    # load_all_s_and_p_data_to_memory()
+    init_all_required_data()
+    load_all_s_and_p_data_to_memory()
     
-    # t2 = time.perf_counter()
+    t2 = time.perf_counter()
     
-    # print(f"Time taken to initialize and load data to memory is {t2 - t1}")
+    print(f"Time taken to initialize and load data to memory is {t2 - t1}")
     
     server.listen()
     print(f"Server is listening on {SERVER}")

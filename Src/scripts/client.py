@@ -37,9 +37,9 @@ def send(msg):
     return recieved_data
 
 
-def get_data_to_send() -> str:
+def get_data_to_send() -> dict:
     # return {"ticker" : "AAPL"}
-    return {"ticker" : "php"}
+    return {"ticker" : "A"}
 
 
 data = get_data_to_send()
