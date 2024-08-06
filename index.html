@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Prediction Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        async function fetchStockData(ticker) {
+            try {
+                const response = await fetch('http://localhost:5000/get_ticker_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ticker: ticker })
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const data = await response.json();
+                updateStockData(data);
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        function updateStockData(data) {
+            document.querySelector('.stat.stock-name p').textContent = data.todays_predicted_close_price;
+            document.querySelector('.stat.volume p').textContent = data.historical_price_data[0][1]; // example usage
+            // Update other elements similarly
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchStockData('AAPL'); // example ticker
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Stock Market Prediction Analysis</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Rorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <a href="#" class="cta-button">Get started now</a>
+    </header>
+
+    <section class="stats">
+        <div class="stat stock-name">
+            <h3>Stock name</h3>
+            <p>Loading...</p>
+            <span class="red">-0.79%</span>
+        </div>
+        <div class="stat volume">
+            <h3>Volume</h3>
+            <p>Loading...</p>
+            <span class="green">+10.95%</span>
+        </div>
+        <div class="stat">
+            <h3>Turnover</h3>
+            <p>65,54,253</p>
+            <span class="red">-0.01%</span>
+        </div>
+        <div class="stat">
+            <h3>Circuits</h3>
+            <p>65,54,253</p>
+            <span class="red">-1.24%</span>
+        </div>
+    </section>
+
+    <section class="market-update">
+        <h2>Market Update</h2>
+        <div class="tabs">
+            <button class="tab-button active">Gainer</button>
+            <button class="tab-button">Loser</button>
+            <button class="tab-button">Top Sectors</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>LTP</th>
+                    <th>24h %</th>
+                    <th>Quantity</th>
+                    <th>Last 7 Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Stock name</td>
+                    <td>315.70</td>
+                    <td class="green">+1.45%</td>
+                    <td>34,823</td>
+                    <td><img src="chart.png" alt="Chart" class="chart"></td>
+                </tr>
+                <tr class="highlight">
+                    <td>Stock name</td>
+                    <td>1082.70</td>
+                    <td class="red">-5.12%</td>
+                    <td>34,823</td>
+                    <td><img src="chart.png" alt="Chart" class="chart"></td>
+                </tr>
+                <tr>
+                    <td>Stock name</td>
+                    <td>1082.70</td>
+                    <td class="red">-3.75%</td>
+                    <td>34,823</td>
+                    <td><img src="chart.png" alt="Chart" class="chart"></td>
+                </tr>
+                <tr>
+                    <td>Stock name</td>
+                    <td>315.70</td>
+                    <td class="green">+1.45%</td>
+                    <td>5219</td>
+                    <td><img src="chart.png" alt="Chart" class="chart"></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>
