@@ -8,11 +8,6 @@ from get_stock_news import get_and_store_all_s_and_p_news_from_yfinance_in_DB, g
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 def get_s_and_p_data():
-    get_s_and_p_info()
-    print("Done getting S & P info")
-    
-    populate_db_with_most_active_stocks()
-    print("Done populating Db with most active stocks")
     
     ticker_listing_data = get_S_and_p_ticker_and_listing_data_as_dataframe()
     get_price_data_and_populate_db(ticker_listing_data)
@@ -28,7 +23,12 @@ def get_most_active():
     
 
 def init_all_required_data() -> None:        
-    s_and_p_info = threading.Thread(target=get_s_and_p_data)
+    
+    get_s_and_p_info()
+    print("Done getting S & P info")
+
+    
+    s_and_p_requirements = threading.Thread(target=get_s_and_p_data)
 
     yf_most_active = threading.Thread(target=get_most_active)
 
@@ -37,7 +37,7 @@ def init_all_required_data() -> None:
     news_api_headlines = threading.Thread(target=get_and_store_news_api_org_todays_top_business_headlines)
     
     
-    s_and_p_info.start()
+    s_and_p_requirements.start()
     yf_most_active.start()
     yfinance_headlines.start()
     news_api_headlines.start()
@@ -48,7 +48,7 @@ def init_all_required_data() -> None:
     news_api_headlines.join()
     print("Done getting top business headlines from newsapi.org")
     
-    s_and_p_info.join()
+    s_and_p_requirements.join()
     yf_most_active.join()
     yfinance_headlines.join()
     news_api_headlines.join()
