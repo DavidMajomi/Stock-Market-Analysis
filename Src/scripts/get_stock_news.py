@@ -33,9 +33,11 @@ def get_and_store_all_s_and_p_news_from_yfinance_in_DB():
             
             df = pd.DataFrame.from_dict(data.news)
             
-            columns = ["thumbnail"]
-            
-            df = df.drop(columns, axis=1)
+            if "thumbnail" in df.columns:
+                columns = ["thumbnail"]
+                
+                
+                df = df.drop(columns, axis=1)
             
             df["relatedTickers"] = df["relatedTickers"].astype(str)
             

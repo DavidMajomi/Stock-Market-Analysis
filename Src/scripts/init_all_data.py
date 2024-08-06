@@ -48,10 +48,8 @@ def init_all_required_data() -> None:
     news_api_headlines.join()
     print("Done getting top business headlines from newsapi.org")
     
-    s_and_p_requirements.join()
     yf_most_active.join()
-    yfinance_headlines.join()
-    news_api_headlines.join()
+    s_and_p_requirements.join()
     
 
     
