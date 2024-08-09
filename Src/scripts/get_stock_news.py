@@ -6,6 +6,8 @@ import sqlite3
 from sqlalchemy import create_engine
 from get_stock_data import get_list_of_tickers_in_db
 import path_constants
+import time
+
 
 PATH_TO_DB_WITH_YF_NEWS = path_constants.PATH_TO_DB_WITH_YF_NEWS
 PATH_TO_DB_PRICE_DATA = path_constants.PATH_TO_DB_PRICE_DATA
@@ -29,7 +31,11 @@ def get_and_store_all_s_and_p_news_from_yfinance_in_DB():
     list_of_tickers = get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
     
     for ticker in list_of_tickers:
-            data = yf.Ticker(ticker)
+        time.sleep(0.0625)
+        
+        data = yf.Ticker(ticker)
+        
+        if(data.news ):
             
             df = pd.DataFrame.from_dict(data.news)
             

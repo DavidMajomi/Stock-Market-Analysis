@@ -34,10 +34,11 @@ def setup_api_keys():
         print("1.) Setup Guardian News API key")
         print("2.) Setup newsapi.org key")
         print("3.) Setup all of the above")
+        print("4.) Skip")
         
         response = (input("Choose from the options: "))
         
-        valid = int_entered_is_valid_option(response, 1, 3)
+        valid = int_entered_is_valid_option(response, 1, 4)
         
         if (valid == False):
             print("Invalid Response \n\n")
@@ -63,8 +64,14 @@ def setup_api_keys():
         key = input("Enter your Guardian News API key: ")
         file = PATH_TO_GUARDIAN_NEWS_API_KEY
         output_api_key(key, file) 
+        
+        
+    elif (response == 4):
+        pass
     
     
 
-# setup_api_keys()
+setup_api_keys()
 init_all_required_data()
+
+print("Done with setup")
