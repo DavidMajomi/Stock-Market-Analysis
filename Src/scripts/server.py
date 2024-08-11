@@ -96,7 +96,19 @@ def get_ticker_info(ticker : str) -> dict:
 
 
 def process_request(request_data):
-    ticker = request_data["ticker"]
+
+    if "get_available_tickers" in request_data:
+        bool_get_available_tickers = request_data["get_available_tickers"]
+    else:
+        bool_get_available_tickers = False
+        
+        
+    if "ticker" in request_data:
+        ticker = request_data["ticker"]
+    else:
+        ticker = None
+        
+        
     
     if (ticker in ALL_TICKERS_IN_DB_DICT):
         
@@ -107,6 +119,7 @@ def process_request(request_data):
             "historical_price_data" : f"Historical data in format ",
             "predicted_price_movement_score" : "A score based on market sentiment from news analysis",
             "adjusted_close_price_based_on_sentiment" : "Closing price adjusted for sentiment",
+            "available_tickers" : "Not Requested",
             "Issue" : None
         }
         
@@ -125,6 +138,21 @@ def process_request(request_data):
             
             ticker_data_to_return_to_client = get_ticker_info(ticker)
             
+            
+    elif (bool_get_available_tickers == True):
+        meta_data = {
+            "Status" : 200,
+            "ticker" : "Stock ticker",
+            "todays_predicted_close_price": "Predicted closing price of ticker",
+            "historical_price_data" : "Not requested",
+            "predicted_price_movement_score" : "A score based on market sentiment from news analysis",
+            "adjusted_close_price_based_on_sentiment" : "Closing price adjusted for sentiment",
+            "available_tickers" : "",
+            "Issue" : None
+        }
+        
+        ticker_data_to_return_to_client = None
+        
     else:
         meta_data = {
             "Status" : 400,
@@ -133,10 +161,15 @@ def process_request(request_data):
             "historical_price_data" : f"Historical data in format ",
             "predicted_price_movement_score" : "A score based on market sentiment from news analysis",
             "adjusted_close_price_based_on_sentiment" : "Closing price adjusted for sentiment",
+            "available_tickers" : "Not Requested",
             "Issue" : "Bad ticker info"
         }
         
         ticker_data_to_return_to_client = None
+        
+    
+    if bool_get_available_tickers == True:
+        meta_data["available_tickers"] = list(ALL_TICKERS_IN_DB_DICT)
         
                        
     data_to_send = {
