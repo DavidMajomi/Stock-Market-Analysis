@@ -39,7 +39,9 @@ def send(msg):
 
 def get_data_to_send() -> dict:
     # return {"ticker" : "AAPL"}
-    return {"ticker" : "A"}
+    # return {"get_available_tickers" : True}
+    # return {"ticker" : "A", "get_available_tickers" : True}
+    return {"ticker" : "AAPL", "get_available_tickers" : False}
 
 
 data = get_data_to_send()
