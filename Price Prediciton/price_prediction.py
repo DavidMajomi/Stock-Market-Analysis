@@ -68,7 +68,7 @@ def get_range(df, start, end):
     return df
 
 
-def seperate_df(df, 5):
+def seperate_df(df):
     dates = df.index  
     X = df.iloc[:, 1:]
     X = X.iloc[:, ::-1]
@@ -105,7 +105,7 @@ def simulate_model(ticker):
     global model
     global df
     df = get_range(map[ticker], "1-1-2023", "12-31-2024", 5)
-    dates, X, y = seperate_df(df, 5)
+    dates, X, y = seperate_df(df)
     
     
     # Implement Scaler
