@@ -1,29 +1,12 @@
-
-# Data Manipulation
 import pandas as pd
-import math
-from datetime import datetime
-import statistics
-import numpy as np
-# Data Vizualization
-import matplotlib.pyplot as plt
-import seaborn as sns
 
-from sklearn.metrics import mean_absolute_error
-
-# Arima Model Building
-from statsmodels.tsa.stattools import acf, pacf
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-from statsmodels.tsa.arima.model import ARIMA
-
-
-# LSTM Model Building
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import layers
 from keras.layers import Dense, LSTM
-from sklearn.preprocessing import MinMaxScaler
 
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import mean_absolute_percentage_error
 
 from get_stock_data import get_all_price_data_mapped_to_ticker
 
@@ -49,7 +32,7 @@ def get_range(df, start, end):
     df = df[["Close"]]
 
     # Creates new columns
-    for x in range(1, 5 + 1):            
+    for x in range(1, 20):            
         df[f"target - {x}"] = df["Close"].shift(x)
         
     df.dropna(inplace = True)
@@ -88,16 +71,12 @@ def create_split(X, y, dates):
     
     dates_val, X_val, y_val = dates[q_80:q_90], X[q_80:q_90], y[q_80:q_90]
     dates_test, X_test, y_test = dates[q_90:], X[q_90:], y[q_90:]
-
-
-#%%
     
-
 
 def simulate_model(ticker):
     global model
     global df
-    df = get_range(map[ticker], "1-1-2023", "12-31-2024")
+    df = get_range(map["AAPL"], "1-1-2023", "12-31-2024")
     dates, X, y = seperate_df(df)
     
     
@@ -106,7 +85,8 @@ def simulate_model(ticker):
     
     # Create train, val, and test split
     create_split(X, y, dates)
-    print(len(y_test), len(X_test))
+    
+    # Create and fit model
     model = Sequential([layers.LSTM(256, return_sequences = True, input_shape=(X_train.shape[1],1)),
         layers.Dropout(.3),
         layers.LSTM(256),
@@ -122,25 +102,17 @@ def simulate_model(ticker):
                   metrics=['mean_absolute_error'])
     
     model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs = 75)
-    test_predictions = model.predict(X[-5].reshape(1,5))
-    next_day_pred = y_scaler.inverse_transform(test_predictions)
-
+    test_predictions = model.predict(X_test)
+    prediction = model.predict(X[-19].reshape(1,19))
+    next_day_pred = y_scaler.inverse_transform(prediction)
+    error = mean_absolute_percentage_error(y_scaler.inverse_transform(test_predictions), y_scaler.inverse_transform(y_test))
+    
     if dates[-1].dayofweek == 4:
         next_day = dates[-1]+ pd.Timedelta("3 day")
     else:
         next_day = dates[-1]+ pd.Timedelta("1 day")
+
     
-    return next_day_pred, next_day
-    
-    
-
-#%%
-
-
-
-
-
-
-
+    return next_day_pred, next_day, error
 
 
