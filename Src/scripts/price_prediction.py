@@ -76,7 +76,7 @@ def create_split(X, y, dates):
 def simulate_model(ticker):
     global model
     global df
-    df = get_range(map["AAPL"], "1-1-2023", "12-31-2024")
+    df = get_range(map[ticker], "1-1-2023", "12-31-2024")
     dates, X, y = seperate_df(df)
     
     
@@ -101,7 +101,7 @@ def simulate_model(ticker):
                   optimizer=Adam(learning_rate=0.001),
                   metrics=['mean_absolute_error'])
     
-    model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs = 75)
+    model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs = 75, verbose=0)
     test_predictions = model.predict(X_test)
     prediction = model.predict(X[-19].reshape(1,19))
     next_day_pred = y_scaler.inverse_transform(prediction)
