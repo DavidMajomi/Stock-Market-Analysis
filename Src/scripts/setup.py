@@ -53,7 +53,7 @@ def setup_api_keys():
         
     elif (response == 2):
         key = input("Enter newsapi.org API key: ")
-        file - PATH_TO_NEWS_API_ORG_API_KEY
+        file = PATH_TO_NEWS_API_ORG_API_KEY
         output_api_key(key, file)
         
     elif (response == 3):
