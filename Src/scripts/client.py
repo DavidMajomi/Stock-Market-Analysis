@@ -41,25 +41,33 @@ def get_data_to_send() -> dict:
     # return {"ticker" : "AAPL"}
     # return {"get_available_tickers" : True}
     # return {"ticker" : "A", "get_available_tickers" : True}
-    return {"ticker" : "AAPL", "get_available_tickers" : False}
+    return {"ticker" : "MSFT", "get_available_tickers" : False}
 
 
 data = get_data_to_send()
 
 data = json.dumps(data)
 
-# t1 = time.perf_counter()
+t1 = time.perf_counter()
 recieved_data = send(data)
-# t2 = time.perf_counter()
+t2 = time.perf_counter()
 
-# print(f"time for first call = {t2 - t1}")
+print(f"time for first call = {t2 - t1}")
 
-# t3 = time.perf_counter()
-# recieved_data = send(data)
-# t4 = time.perf_counter()
+t3 = time.perf_counter()
+recieved_data = send(data)
+t4 = time.perf_counter()
 
-# print(f"time for second call = {t4 - t3}")
+print(f"time for second call = {t4 - t3}")
 
-print(json.dumps((recieved_data), indent=4))
+recieved = (recieved_data)
+
+# print(type(recieved))
+print(recieved["Meta Data"], "\n")
+print("Ticker: ", recieved["Ticker Data"]["ticker"])
+print(f"Todays predicted close price: {recieved['Ticker Data']['todays_predicted_close_price']}" )
+
+
+
 # print(recieved_data["Ticker Data"])
 # print(json.dumps((recieved_data["Meta Data"]), indent=4))
