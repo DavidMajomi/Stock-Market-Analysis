@@ -21,8 +21,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = secrets.token_bytes(16) 
 
 
-
-@app.route("/get_available_tickers", methods = ['GET', 'POST'])
+@app.route("/", methods = ['GET'])
+@app.route("/get_available_tickers", methods = ['GET'])
 def get_available_tickers():
     data = {"get_available_tickers" : True}
     
@@ -31,7 +31,7 @@ def get_available_tickers():
     return send(data)
 
 
-@app.route('/get_data/<string:ticker>', methods = ['GET', 'POST'])
+@app.route('/get_data/<string:ticker>', methods = ['GET'])
 def allow(ticker):
     
     data = {"ticker" : ticker, "get_available_tickers" : False}
