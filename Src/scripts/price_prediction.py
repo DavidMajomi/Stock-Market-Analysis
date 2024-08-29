@@ -76,7 +76,7 @@ def create_split(X, y, dates):
 def simulate_model(ticker):
     global model
     global df
-    df = get_range(map[ticker], "1-1-2023", "12-31-2024")
+    df = get_range(map[ticker], "6-1-2024", "12-31-2024")
     dates, X, y = seperate_df(df)
     
     
