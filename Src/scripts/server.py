@@ -8,6 +8,7 @@ import multiprocessing
 from path_constants import PATH_TO_DB_PRICE_DATA  
 from init_all_data import init_all_required_data
 from get_stock_data import get_table_matching_ticker, get_list_of_tickers_in_db
+from price_prediction import simulate_model
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +26,10 @@ ALL_TICKER_DATA = {}
 
 
 def get_todays_predicted_close_price(ticker: str) -> float:
-    return 1000
+        
+    next_day_pred, date, error = simulate_model(ticker)
+    
+    return int(next_day_pred)
 
 
 def get_historical_price_data(ticker: str) -> list:
@@ -47,7 +51,9 @@ def get_adjusted_close_price_based_on_sentiment(ticker: str) -> float:
 def load_all_s_and_p_data_to_memory():
     list_of_tickers = get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
     
+    count = 0
     for ticker in list_of_tickers:
+        print(count)
         data_columns, hist_data = get_historical_price_data(ticker)
         
         ticker_data = {
@@ -60,6 +66,8 @@ def load_all_s_and_p_data_to_memory():
         }
         
         ALL_TICKER_DATA[ticker] = ticker_data
+        
+        count += 1
     
 
 def get_ticker_info(ticker : str) -> dict:
@@ -215,7 +223,7 @@ def start():
     t1 = time.perf_counter()
     
     init_all_required_data()
-    load_all_s_and_p_data_to_memory()
+    # load_all_s_and_p_data_to_memory()
     
     t2 = time.perf_counter()
     
