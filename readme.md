@@ -1,50 +1,15 @@
 # Stock Market Analysis
 
 ## Overview
-The goal of this project is to analyze the S&P 500 index and create an interactive frontend to utilize the meaningful insights gained using Machine Learning.
+An Open source python server application for distributing public financial data and compute results on a local network, minimizing external requests, and conserving external API usage.
 
-## Current Tasks
-- ### Machine Learning 
-    - Price prediction with LSTM
-    - Sentiment Analysis
-
-- ### A python server to provide required data to different clients
-
-- ### Building a web app to display data using data from server
-    - TBD
-
-
-- ### Data Sourcing and storage
-    - News Data for sentiment analysis
-
-
-## Completed tasks
-- ### Data Sourcing and storage
-    * Getting s&p index tickers 
-    * Getting and storing historical stock prices for all tickers in a database.
-
-
-## Roles
-- ### Price prediction with LSTM
-    * Jaydentani
-    * Chtjigur
-    * Brianna
-    
-- ### Price movement prediction with sentiment analysis
-    * Dagi
-    * Ana
-    * King
-
-- ### Data Sourcing and Storage
-    * David
-
-- ### Web app
-    * Due to the scope, i think everyone will probably work here at some point.
-    * Zindzi
-    * Brianna
-
-- ### Python Server and related API's
-    * David
+## Features
+- Stock price scraping and storage
+- Stock News gathering scraping and API's and storage
+- A local server for multi-process communications
+- A flask endpoint for easier data sharing and access
+- A plug and play design for seamless feature integration
+- A functional LSTM price prediction feature using acquired historical prices.
 
 ## Directory Structure
 
