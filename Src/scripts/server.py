@@ -29,7 +29,7 @@ def get_todays_predicted_close_price(ticker: str) -> float:
         
     next_day_pred, date, error = simulate_model(ticker)
     
-    return int(next_day_pred)
+    return float(next_day_pred[0])
 
 
 def get_historical_price_data(ticker: str) -> list:
@@ -222,7 +222,7 @@ def start():
     
     t1 = time.perf_counter()
     
-    init_all_required_data()
+    init_all_required_data()s
     # load_all_s_and_p_data_to_memory()
     
     t2 = time.perf_counter()
