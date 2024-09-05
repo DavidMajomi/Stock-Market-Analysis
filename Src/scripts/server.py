@@ -222,7 +222,7 @@ def start():
     
     t1 = time.perf_counter()
     
-    init_all_required_data()s
+    init_all_required_data()
     # load_all_s_and_p_data_to_memory()
     
     t2 = time.perf_counter()
