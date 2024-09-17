@@ -23,7 +23,7 @@ for i, entry in enumerate(feed.entries):
 
     sentiment = pipe(entry.summary)[0]
 
-    print(f"Sentiment {sentiment["label"]}, Score:{sentiment["score"]}")
+    print(f"Sentiment: {sentiment['label']}, Score: {sentiment['score']}")
 
     print("-"*40)
 
@@ -35,5 +35,5 @@ for i, entry in enumerate(feed.entries):
         num_articles += 1
 
 final_score = total_score/ num_articles
-print(f"Overall Sentiment:{"Positive" if final_score>= 0.15 else "Negative" if final_score<= -0.15 else "Neutral"} {final_score}")
+print(f"Overall Sentiment:{'Positive' if final_score >= 0.15 else 'Negative' if final_score <= -0.15 else 'Neutral'} {final_score}")
 
