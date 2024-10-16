@@ -18,7 +18,7 @@ def get_most_active():
     get_most_active_stocks_from_yfinance()
     print("Done getting current most active stocks")
     
-    populate_db_with_most_active_stocks()
+    # populate_db_with_most_active_stocks()
     print("Done populating Db with most active stocks")
     
 

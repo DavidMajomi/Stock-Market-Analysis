@@ -38,10 +38,10 @@ def send(msg):
 
 
 def get_data_to_send() -> dict:
-    # return {"ticker" : "AAPL"}
+    return {"ticker" : "AAPL"}
     # return {"get_available_tickers" : True}
-    # return {"ticker" : "A", "get_available_tickers" : True}
-    return {"ticker" : "MSFT", "get_available_tickers" : False}
+    # return {"ticker" : "A", "get_available_tickers" : True
+    # return {"ticker" : "MSFT", "get_available_tickers" : False}
 
 
 data = get_data_to_send()
@@ -63,6 +63,7 @@ print(f"time for second call = {t4 - t3}")
 recieved = (recieved_data)
 
 # print(type(recieved))
+print(recieved)
 print(recieved["Meta Data"], "\n")
 print("Ticker: ", recieved["Ticker Data"]["ticker"])
 print(f"Todays predicted close price: {recieved['Ticker Data']['todays_predicted_close_price']}" )
