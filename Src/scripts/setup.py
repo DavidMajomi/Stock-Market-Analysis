@@ -71,7 +71,7 @@ def setup_api_keys():
     
     
 
-setup_api_keys()
+# setup_api_keys()
 init_all_required_data()
 
 print("Done with setup")
