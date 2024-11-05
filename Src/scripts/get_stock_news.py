@@ -7,7 +7,12 @@ from sqlalchemy import create_engine
 from get_stock_data import get_list_of_tickers_in_db
 import path_constants
 import time
+from dotenv import load_dotenv
 
+load_dotenv()
+
+
+NEWS_API_ORG_API_KEY = os.getenv("NEWS_API_ORG_API_KEY")
 
 PATH_TO_DB_WITH_YF_NEWS = path_constants.PATH_TO_DB_WITH_YF_NEWS
 PATH_TO_DB_PRICE_DATA = path_constants.PATH_TO_DB_PRICE_DATA
@@ -53,10 +58,9 @@ def get_and_store_all_s_and_p_news_from_yfinance_in_DB():
             
             engine.dispose()
             
-        
 
 def get_and_store_news_api_org_todays_top_business_headlines():
-    key = read_api_key_from_file(PATH_TO_NEWS_API_ORG_API_KEY)
+    key = NEWS_API_ORG_API_KEY
     url = f"https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey={key}"
     
     data = requests.get(url)
