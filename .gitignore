@@ -27,3 +27,4 @@ Src/scripts/yf_news.py
 Src/scripts/NewsApiTest.py
 
 .env
+data/raw data/S&P 500 info.csv
