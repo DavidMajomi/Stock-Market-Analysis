@@ -245,7 +245,8 @@ def start():
         print(f"Number of Connections: {threading.active_count() - 1} \n")
 
 
-print("Starting Server...... \n")
-start()
+if __name__ == '__main__':
+    print("Starting Server...... \n")
+    start()
     
 

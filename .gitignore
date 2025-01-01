@@ -25,3 +25,5 @@ Src/__pycache__/
 Src/scripts/yf_news.py
 
 Src/scripts/NewsApiTest.py
+
+.env
