@@ -108,9 +108,9 @@ def simulate_model(ticker):
     error = mean_absolute_percentage_error(y_scaler.inverse_transform(test_predictions), y_scaler.inverse_transform(y_test))
     
     if dates[-1].dayofweek == 4:
-        next_day = dates[-1]+ pd.Timedelta("3 day")
+        next_day = dates[-1]+ pd.Timedelta("3 days 16 hours")
     else:
-        next_day = dates[-1]+ pd.Timedelta("1 day")
+        next_day = dates[-1]+ pd.Timedelta("1 day 16 hours")
 
     
     return next_day_pred, next_day, error
