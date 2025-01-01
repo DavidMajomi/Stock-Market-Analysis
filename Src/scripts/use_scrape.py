@@ -1,3 +1,0 @@
-from scrape import get_most_active_stocks_from_yfinance
-
-get_most_active_stocks_from_yfinance()
