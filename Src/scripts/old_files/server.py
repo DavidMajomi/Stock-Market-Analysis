@@ -32,7 +32,7 @@ def get_todays_predicted_close_price(ticker: str) -> float:
     return float(next_day_pred[0])
 
 
-def get_historical_price_data(ticker: str) -> list:
+def get_historical_price_data(ticker: str) -> tuple[list, list]:
     table = get_table_matching_ticker(ticker)
     # print(table.to_dict())
     
@@ -124,7 +124,7 @@ def process_request(request_data):
             "Status" : 200,
             "ticker" : "Stock ticker",
             "todays_predicted_close_price": "Predicted closing price of ticker",
-            "historical_price_data" : f"Historical data in format ",
+            "historical_price_data" : "Historical data in format ",
             "predicted_price_movement_score" : "A score based on market sentiment from news analysis",
             "adjusted_close_price_based_on_sentiment" : "Closing price adjusted for sentiment",
             "available_tickers" : "Not Requested",
@@ -166,7 +166,7 @@ def process_request(request_data):
             "Status" : 400,
             "ticker" : "Stock ticker",
             "todays_predicted_close_price": "Predicted closing price of ticker",
-            "historical_price_data" : f"Historical data in format ",
+            "historical_price_data" : "Historical data in format ",
             "predicted_price_movement_score" : "A score based on market sentiment from news analysis",
             "adjusted_close_price_based_on_sentiment" : "Closing price adjusted for sentiment",
             "available_tickers" : "Not Requested",
