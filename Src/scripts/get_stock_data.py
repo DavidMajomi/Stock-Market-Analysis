@@ -4,6 +4,8 @@ import yfinance as yf
 import path_constants
 import sqlite3
 from sqlalchemy import create_engine
+from dotenv import load_dotenv
+
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -44,20 +46,46 @@ def get_most_active_stocks_as_dataframe() -> pd.DataFrame:
     return df
 
 
-def get_price_data_and_populate_db(ticker_listing_data):
+
+def add_single_stock_price_data_to_db(ticker_listing_data, index):
+    symbol = ticker_listing_data["Symbol"][index]
+
+    symbolInfo = yf.Ticker(symbol)
+    price_data = symbolInfo.history(period="max")
+
+    engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
     
+    price_data.to_sql(symbol, con=engine, if_exists="replace", index=True)
+    
+    engine.dispose()
+
+
+def get_price_data_and_populate_db(ticker_listing_data):
+    true_false_dict = {
+        "True" : True,
+        "TRUE" : True,
+        "true" : True,
+        "False" : False,
+        "FALSE" : False,
+        "false" : False
+    }
+    
+    load_dotenv()
+    testing_mode = true_false_dict[os.getenv("TESTING_MODE")]
+    print(f"Testing Mode: {testing_mode}")
+    
+    count = 0
     for index in ticker_listing_data.index:
-  
-        symbol = ticker_listing_data["Symbol"][index]
+        if testing_mode:
+            if count < 5:
+                add_single_stock_price_data_to_db(ticker_listing_data, index)
+                
+                count = count + 1
+                print(count)
+                
+        else:
+            add_single_stock_price_data_to_db(ticker_listing_data, index)
 
-        symbolInfo = yf.Ticker(symbol)
-        price_data = symbolInfo.history(period="max")
-
-        engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
-        
-        price_data.to_sql(symbol, con=engine, if_exists="replace", index=True)
-        
-        engine.dispose()
         
 
 def populate_db_with_most_active_stocks():
