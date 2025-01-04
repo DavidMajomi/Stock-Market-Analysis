@@ -19,12 +19,6 @@ from path_constants import PATH_TO_DB_PRICE_DATA
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-HEADER = server_client_constants.HEADER
-PORT = server_client_constants.PORT
-SERVER = server_client_constants.SERVER
-ADDR = server_client_constants.ADDR
-FORMAT = server_client_constants.FORMAT
-
 
 app = Flask(__name__)
 
@@ -32,7 +26,7 @@ app.config['SECRET_KEY'] = secrets.token_bytes(16)
 
 LOCK = multiprocessing.Lock()
 
-ALL_TICKERS_IN_DB_DICT = server_client_constants.ALL_TICKERS_IN_DB_DICT
+ALL_TICKERS_IN_DB_DICT = get_stock_data.get_tickers_as_associative_container(path_constants.PATH_TO_DB_PRICE_DATA)
 ALL_TICKER_DATA = {}
 
 
