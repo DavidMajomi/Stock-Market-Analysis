@@ -13,6 +13,7 @@ import price_prediction
 import server_client_constants
 
 from flask import Flask
+from flask_cors import CORS
 from sqlalchemy import create_engine
 from path_constants import PATH_TO_DB_PRICE_DATA  
 
@@ -21,6 +22,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SECRET_KEY'] = secrets.token_bytes(16) 
 
