@@ -55,7 +55,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file in the root directory with required API keys and configurations
+3. Create a `.env` file in the root directory with the following variables:
+```
+NEWS_API_ORG_KEY = "API_KEY"    # Your News API key from newsapi.org
+TESTING_MODE = "True"           # Enable testing mode with sample data and limited model training
+                               # Set to "False" for production mode with live data
+```
 
 4. Initialize the data and train models:
 ```bash
