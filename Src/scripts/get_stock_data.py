@@ -40,8 +40,11 @@ def get_most_active_stocks_as_dataframe() -> pd.DataFrame:
         "pe_ratio"
     ]
 
-    
-    df = pd.read_csv(PATH_TO_CSV_WITH_MOST_ACTIVE_STOCKS, usecols=columns)
+    try:
+        
+        df = pd.read_csv(PATH_TO_CSV_WITH_MOST_ACTIVE_STOCKS, usecols=columns)
+    except FileNotFoundError:
+        print("Most Active Stock Data File Not Found try fixing the data sourcing and storage function.")
 
     return df
 
@@ -81,7 +84,6 @@ def get_price_data_and_populate_db(ticker_listing_data):
                 add_single_stock_price_data_to_db(ticker_listing_data, index)
                 
                 count = count + 1
-                print(count)
                 
         else:
             add_single_stock_price_data_to_db(ticker_listing_data, index)
@@ -152,7 +154,6 @@ def get_date_and_close_price_data_macthing_ticker(ticker: str) -> pd.DataFrame:
 def get_all_price_data_mapped_to_ticker() -> dict:
     ticker_price_data_map = {}
     
-    print(PATH_TO_DB_DIR)
     all_tickers = get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
     
     for ticker in all_tickers:
