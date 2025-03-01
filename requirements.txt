@@ -27,6 +27,7 @@ fastparquet==2024.5.0
 feedparser==6.0.11
 filelock==3.16.0
 Flask==3.0.3
+Flask-Cors==5.0.0
 flask-form==1.0.0
 flatbuffers==24.3.25
 fonttools==4.53.1
@@ -159,5 +160,5 @@ webencodings==0.5.1
 websockets==10.4
 Werkzeug==3.0.3
 wrapt==1.16.0
-yfinance==0.2.40
+yfinance==0.2.54
 zipp==3.20.1
