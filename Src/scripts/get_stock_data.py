@@ -45,6 +45,7 @@ def get_most_active_stocks_as_dataframe() -> pd.DataFrame:
         df = pd.read_csv(PATH_TO_CSV_WITH_MOST_ACTIVE_STOCKS, usecols=columns)
     except FileNotFoundError:
         print("Most Active Stock Data File Not Found try fixing the data sourcing and storage function.")
+        raise FileNotFoundError
 
     return df
 
