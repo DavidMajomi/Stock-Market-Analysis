@@ -74,7 +74,7 @@ def get_price_data_and_populate_db(ticker_listing_data):
         "false" : False
     }
     
-    load_dotenv()
+    load_dotenv(override=True)
     testing_mode = true_false_dict[os.getenv("TESTING_MODE")]
     print(f"Testing Mode: {testing_mode}")
     
