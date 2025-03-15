@@ -36,24 +36,45 @@ def get_and_store_all_s_and_p_news_from_yfinance_in_DB():
         
         data = yf.Ticker(ticker)
         
-        if(data.news ):
+        if(data.news):
+            temp = []
             
-            df = pd.DataFrame.from_dict(data.news)
-            
-            if "thumbnail" in df.columns:
-                columns = ["thumbnail"]
+            for i in data.news:
+                temp.append(i)
                 
+            # replace element wwhich is a dict with the actual content
+            for i in range(len(temp)):
+                temp[i] = temp[i]["content"]
                 
-                df = df.drop(columns, axis=1)
+            df = pd.DataFrame.from_records(temp)
             
-            df["relatedTickers"] = df["relatedTickers"].astype(str)
+            columns=["thumbnail", 
+                "provider", 
+                "canonicalUrl", 
+                "clickThroughUrl", 
+                "finance", 
+                "storyline", 
+                "previewUrl", 
+                "displayTime", 
+                "isHosted", 
+                "bypassModal", 
+                "metadata", 
+                "description"]
+            
+            drop_columns = []
+            
+            for i in columns:
+                if i in df.columns:
+                    drop_columns.append(i)
+                    
+            df.drop(columns=drop_columns, inplace=True)
             
             engine = create_engine("sqlite:///" + PATH_TO_DB_WITH_YF_NEWS, echo=False)
             
             df.to_sql(ticker, con=engine, if_exists="replace", index=True)
             
             engine.dispose()
-            
+            # print(df)
         
 
 def get_and_store_news_api_org_todays_top_business_headlines():
@@ -76,4 +97,5 @@ def get_and_store_news_api_org_todays_top_business_headlines():
     
     engine.dispose()
     
-    
+if __name__ == "__main__":
+    get_and_store_all_s_and_p_news_from_yfinance_in_DB()
