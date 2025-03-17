@@ -3,8 +3,10 @@ import time
 import secrets
 import sqlite3
 import datetime
-import multiprocessing
+import random
 import pandas as pd
+import multiprocessing
+from dotenv import load_dotenv
 
 import init_all_data
 import path_constants
@@ -12,10 +14,11 @@ import get_stock_data
 import price_prediction
 import server_client_constants
 
+from pathlib import Path
 from flask import Flask
 from flask_cors import CORS
 from sqlalchemy import create_engine
-from path_constants import PATH_TO_DB_PRICE_DATA  
+from path_constants import PATH_TO_DB_PRICE_DATA, PATH_TO_DB_WITH_MODEL_PREDICTIONS
 
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +44,7 @@ def get_historical_price_data(ticker: str) -> tuple[list, list]:
 
 def get_todays_predicted_close_price(ticker):
     print("USE DB Pred")
+    print(ticker)
     query = f""" SELECT todays_predicted_close_price 
     FROM {path_constants.PREDICTIONS_TABLE_NAME}
     WHERE ticker='{ticker}';"""
@@ -109,8 +113,8 @@ def load_all_s_and_p_data_to_memory():
             "todays_predicted_close_price": get_todays_predicted_close_price(ticker),
             "historical_price_columns" : data_columns,
             "historical_price_data" : hist_data,
-            "predicted_price_movement_score" : get_predicted_price_movement_score(ticker),
-            "adjusted_close_price_based_on_sentiment" : get_adjusted_close_price_based_on_sentiment(ticker)
+            "predicted_price_movement_score" : get_stock_data.get_pred_price_mov_score(ticker),
+            "adjusted_close_price_based_on_sentiment" : get_stock_data.get_pred_price_mov_score(ticker)
         }
         
         ALL_TICKER_DATA[ticker] = ticker_data
@@ -130,7 +134,6 @@ def process_request(request_data):
         ticker = request_data["ticker"]
     else:
         ticker = None
-        
         
     
     if (ticker in ALL_TICKERS_IN_DB_DICT):
@@ -240,16 +243,152 @@ def train_models_and_store_predictions():
     
     engine.dispose()
     
+    
+def generate_demo_price(ticker):
+    price_data = float(get_stock_data.get_most_recent_price(ticker))
+    print(price_data)
+    
+    num = random.random()
+    
+    if num < 0.5:
+        pred = price_data + (price_data * 0.02)
+    else:
+        pred = price_data - (price_data * 0.02)
+        
+    pred = price_data
+    date = str(datetime.datetime.now())
+    error = 0.02
+    
+    return [pred], date, error
 
+
+def generate_price_movement_score(demo_price):
+    
+    num = random.random()
+    
+    if num < 0.5:
+        pred = demo_price + (demo_price * 0.02)
+    else:
+        pred = demo_price - (demo_price * 0.02)
+    
+    return pred
+    
+    
+def generate_and_store_demo_model_predictions():
+    
+    all_ticker_data = []
+    list_of_tickers = get_stock_data.get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
+    # print(f"List of tickers: {list_of_tickers}")
+    
+    count = 0
+    for ticker in list_of_tickers:
+        # if ticker != "BRK.B" and ticker != "BF.B":
+        t1 = time.perf_counter()
+        next_day_pred, date, error = generate_demo_price(ticker)
+        t2 = time.perf_counter()
+        next_day_pred = float(next_day_pred[0])
+        # print(f"{ticker}: {count}")
+        
+        ticker_data = {
+            "ticker" : ticker,
+            "todays_predicted_close_price": next_day_pred,
+            "price_prediction_date" : date,
+            "price_prediction_mean_absolute_percentage_error" : round(error * 100, 3),
+            "predicted_price_movement_score" : generate_price_movement_score(next_day_pred),
+            "adjusted_close_price_based_on_sentiment" : next_day_pred,
+            "price_prediction_train_pred_time" : (t2 - t1)
+        }
+        
+        all_ticker_data.append(ticker_data)
+        
+        count += 1
+        
+    predictions_df = pd.DataFrame.from_records(all_ticker_data)
+    
+    # print(predictions_df)
+    
+    engine = create_engine("sqlite:///" + path_constants.PATH_TO_DB_WITH_MODEL_PREDICTIONS, echo=False)
+        
+    predictions_df.to_sql(path_constants.PREDICTIONS_TABLE_NAME, con=engine, if_exists="replace", index=False)
+    
+    engine.dispose()
+
+
+
+def check_required_data_exists():
+    
+    return (len(get_stock_data.get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)) > 2)
+    
+    
+def check_predictions_exist():
+    path = Path(PATH_TO_DB_WITH_MODEL_PREDICTIONS)
+    
+    return path.is_file()
+
+
+
+def testing_mode_startup():
+    required_data_exists = check_required_data_exists()
+    if required_data_exists:
+        print("Required Data Present")
+    else:
+        init_all_data.init_all_required_data()
+    
+    predictions_exist = check_predictions_exist()
+    if predictions_exist:
+        print("Prediction Data Exists")
+    else:
+        generate_and_store_demo_model_predictions()
+    
+    
 def update_data():
     
+    true_false_dict = {
+        "True" : True,
+        "TRUE" : True,
+        "true" : True,
+        "False" : False,
+        "FALSE" : False,
+        "false" : False
+    }
+    
+    load_dotenv(override=True)
+    testing_mode = true_false_dict[os.getenv("TESTING_MODE")]
+    time_to_update = int(os.getenv("UPDATE_HOUR"))
+    
+    
     while True:
-        done_update = False
         current_time = datetime.datetime.now()
         
-        if current_time.hour == 16:
+        if not testing_mode:
+            # Wait until new day before updating data
+            while not current_time.hour == time_to_update:
+                current_time = datetime.datetime.now()
+                
+                load_dotenv(override=True)
+                
+                time_to_update = int(os.getenv("UPDATE_HOUR"))
+                time.sleep(3600)
+        
             init_all_data.init_all_required_data()
             train_models_and_store_predictions()
+            time.sleep(3600)            
+                
+        else:
+            # Wait until new day before updating data
+            while not current_time.hour == time_to_update:
+                current_time = datetime.datetime.now()
+                
+                load_dotenv(override=True)
+                                
+                time_to_update = int(os.getenv("UPDATE_HOUR"))
+
+                time.sleep(3600)
+        
+            testing_mode_startup()
+            time.sleep(3600)            
+                
+            
 
 
 @app.route("/", methods = ['GET'])
@@ -269,8 +408,26 @@ def allow(ticker):
 
 
 if __name__ == '__main__':
-    init_all_data.init_all_required_data()
-    train_models_and_store_predictions()
+    
+    true_false_dict = {
+        "True" : True,
+        "TRUE" : True,
+        "true" : True,
+        "False" : False,
+        "FALSE" : False,
+        "false" : False
+    }
+    
+    load_dotenv(override=True)
+    testing_mode = true_false_dict[os.getenv("TESTING_MODE")]
+    print(f"Testing Mode: {testing_mode}")
+    
+    if testing_mode is False:
+        init_all_data.init_all_required_data()
+        train_models_and_store_predictions()
+    else:
+        testing_mode_startup()
+    
     
     load_all_s_and_p_data_to_memory()
     ALL_TICKERS_IN_DB_DICT = server_client_constants.ALL_TICKERS_IN_DB_DICT
