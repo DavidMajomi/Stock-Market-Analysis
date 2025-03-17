@@ -4,7 +4,6 @@ import yfinance as yf
 import path_constants
 import sqlite3
 from sqlalchemy import create_engine
-from dotenv import load_dotenv
 
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -16,6 +15,8 @@ PATH_TO_CSV_WITH_MOST_ACTIVE_STOCKS = path_constants.PATH_TO_CSV_WITH_MOST_ACTIV
 PATH_TO_DB_PRICE_DATA = path_constants.PATH_TO_DB_PRICE_DATA
 PATH_TO_DB_WITH_MOST_ACTIVE_STOCKS = path_constants.PATH_TO_DB_WITH_MOST_ACTIVE_STOCKS
 MOST_ACTIVE_STOCKS_TABLE_NAME = path_constants.MOST_ACTIVE_STOCKS_TABLE_NAME
+
+PATH_TO_DB_WITH_MODEL_PRED = path_constants.PATH_TO_DB_WITH_MODEL_PREDICTIONS
 
 def get_S_and_p_ticker_and_listing_data_as_dataframe() -> pd.DataFrame:
         
@@ -49,6 +50,33 @@ def get_most_active_stocks_as_dataframe() -> pd.DataFrame:
 
     return df
 
+# Start with microsoft stock as base stock and use it to populate price data fo all other stocks
+# If Microsoft data in invalid format, update the base stock with that of the current stock being populated and store the data
+# This solution not meant to be comprehensive as some data loss for the test mode is tolerable.
+def generate_price_data_and_populate_db(ticker_listing_data):
+    stock_with_data = "MSFT"
+    symbolInfo = yf.Ticker(stock_with_data)
+    
+    price_data = symbolInfo.history(period="max")
+    
+    engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
+
+    for index in ticker_listing_data.index:
+        symbol = ticker_listing_data["Symbol"][index]
+          
+        if len(price_data)  > 1:
+            
+            price_data.to_sql(symbol, con=engine, if_exists="replace", index=True)
+            
+        else:
+            symbolInfo = yf.Ticker(symbol)
+            price_data = symbolInfo.history(period="max")
+            
+            
+            price_data.to_sql(symbol, con=engine, if_exists="replace", index=True)
+            
+        
+    engine.dispose()
 
 
 def add_single_stock_price_data_to_db(ticker_listing_data, index):
@@ -56,37 +84,18 @@ def add_single_stock_price_data_to_db(ticker_listing_data, index):
 
     symbolInfo = yf.Ticker(symbol)
     price_data = symbolInfo.history(period="max")
-
-    engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
     
-    price_data.to_sql(symbol, con=engine, if_exists="replace", index=True)
-    
-    engine.dispose()
+    if len(price_data)  > 1:
+        engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
+        
+        price_data.to_sql(symbol, con=engine, if_exists="replace", index=True)
+        
+        engine.dispose()
 
 
 def get_price_data_and_populate_db(ticker_listing_data):
-    true_false_dict = {
-        "True" : True,
-        "TRUE" : True,
-        "true" : True,
-        "False" : False,
-        "FALSE" : False,
-        "false" : False
-    }
-    
-    load_dotenv(override=True)
-    testing_mode = true_false_dict[os.getenv("TESTING_MODE")]
-    print(f"Testing Mode: {testing_mode}")
-    
-    count = 0
+   
     for index in ticker_listing_data.index:
-        if testing_mode:
-            if count < 5:
-                add_single_stock_price_data_to_db(ticker_listing_data, index)
-                
-                count = count + 1
-                
-        else:
             add_single_stock_price_data_to_db(ticker_listing_data, index)
 
         
@@ -161,4 +170,54 @@ def get_all_price_data_mapped_to_ticker() -> dict:
         ticker_price_data_map[ticker] = get_table_matching_ticker(ticker)
         
     return ticker_price_data_map
+
+
+def get_most_recent_price(ticker: str) -> pd.DataFrame:
+    
+    query = f"SELECT CLOSE FROM '{ticker}' order by rowid DESC LIMIT 1"
+    
+    engine = create_engine("sqlite:///" + PATH_TO_DB_PRICE_DATA, echo=False)
+    
+    price_data = pd.read_sql(query, engine)
+
+    return price_data["Close"][0]
         
+
+def get_price_pred(ticker):
+    query = f"SELECT todays_predicted_close_price, price_prediction_date, price_prediction_mean_absolute_percentage_error FROM predictions WHERE ticker = '{ticker}'"
+    
+    engine = create_engine("sqlite:///" + PATH_TO_DB_WITH_MODEL_PRED, echo=False)
+    
+    price_data = pd.read_sql(query, engine)
+    
+    return [price_data["todays_predicted_close_price"][0]], price_data["price_prediction_date"][0], price_data["price_prediction_mean_absolute_percentage_error"][0]
+
+
+def get_adj_pred_close_price(ticker):
+    query = f"SELECT adjusted_close_price_based_on_sentiment FROM predictions WHERE ticker = '{ticker}'"
+    
+    engine = create_engine("sqlite:///" + PATH_TO_DB_WITH_MODEL_PRED, echo=False)
+    
+    price_data = pd.read_sql(query, engine)
+    
+    return price_data["adjusted_close_price_based_on_sentiment"][0]
+
+
+def get_pred_price_mov_score(ticker):
+    query = f"SELECT predicted_price_movement_score FROM predictions WHERE ticker = '{ticker}'"
+    
+    engine = create_engine("sqlite:///" + PATH_TO_DB_WITH_MODEL_PRED, echo=False)
+    
+    price_data = pd.read_sql(query, engine)
+    
+    return price_data["predicted_price_movement_score"][0]
+
+
+
+    
+if __name__ == "__main__":
+    a = get_price_pred("MSFT")
+    b = get_adj_pred_close_price("MSFT")
+    c = get_pred_price_mov_score("MSFT")
+    
+    print(a, b, c)
