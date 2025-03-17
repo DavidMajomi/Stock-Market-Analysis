@@ -43,8 +43,8 @@ def get_historical_price_data(ticker: str) -> tuple[list, list]:
 
 
 def get_todays_predicted_close_price(ticker):
-    print("USE DB Pred")
-    print(ticker)
+    # print("USE DB Pred")
+    # print(ticker)
     query = f""" SELECT todays_predicted_close_price 
     FROM {path_constants.PREDICTIONS_TABLE_NAME}
     WHERE ticker='{ticker}';"""
@@ -68,6 +68,7 @@ def get_adjusted_close_price_based_on_sentiment(ticker: str) -> float:
     
     
 def get_ticker_info(ticker : str) -> dict:
+    print("Getting Individual Ticker Data")
     if (ticker in ALL_TICKER_DATA):
         
         ticker_data_to_return_to_client = {
@@ -101,11 +102,12 @@ def get_ticker_info(ticker : str) -> dict:
     
     
 def load_all_s_and_p_data_to_memory():
+    print("Loading Data into memory")
     list_of_tickers = get_stock_data.get_list_of_tickers_in_db(PATH_TO_DB_PRICE_DATA)
     
     count = 0
     for ticker in list_of_tickers:
-        print(count)
+        # print(count)
         data_columns, hist_data = get_historical_price_data(ticker)
         
         ticker_data = {
@@ -342,6 +344,7 @@ def testing_mode_startup():
     
     
 def update_data():
+    print("Update Data Process has started")
     
     true_false_dict = {
         "True" : True,
@@ -368,10 +371,11 @@ def update_data():
                 load_dotenv(override=True)
                 
                 time_to_update = int(os.getenv("UPDATE_HOUR"))
-                time.sleep(3600)
         
             init_all_data.init_all_required_data()
             train_models_and_store_predictions()
+            print(current_time)
+            print(f"Update at Hour {time_to_update}")
             time.sleep(3600)            
                 
         else:
@@ -383,9 +387,10 @@ def update_data():
                                 
                 time_to_update = int(os.getenv("UPDATE_HOUR"))
 
-                time.sleep(3600)
-        
+            print("Starting test data update")
             testing_mode_startup()
+            print(current_time)
+            print(f"Update at Hour {time_to_update}")
             time.sleep(3600)            
                 
             
@@ -431,6 +436,10 @@ if __name__ == '__main__':
     
     load_all_s_and_p_data_to_memory()
     ALL_TICKERS_IN_DB_DICT = server_client_constants.ALL_TICKERS_IN_DB_DICT
+    
+    update = multiprocessing.Process(target=update_data)
+    
+    update.start()
     
     
     app.run(host='0.0.0.0', port=5000, debug = True)
