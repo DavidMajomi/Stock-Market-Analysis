@@ -27,7 +27,7 @@ An Open source python server application for distributing public financial data 
 * [Current Project Scope](./Documentation/Project%20Scope.md)
 
 ### [Src](./Src)
-* [notebooks/](./Src/notebooks) - Jupyter notebooks for analysis and model development
+* [notebooks/](./Src/scripts/notebooks) - Jupyter notebooks for data scraping
 * [scripts/](./Src/scripts) - Core Python scripts including:
   - `app.py` - Main Flask application
   - `init_all_data.py` - Data initialization
@@ -59,7 +59,8 @@ pip install -r requirements.txt
 ```
 NEWS_API_ORG_KEY = "API_KEY"    # Your News API key from newsapi.org
 TESTING_MODE = "True"           # Enable testing mode with sample data and limited model training
-                               # Set to "False" for production mode with live data
+                                # Set to "False" for production mode with live data
+UPDATE_HOUR = 0                 # Hour to uupdate in 24 hour format
 ```
 
 4. Initialize the data and train models:
